@@ -2,16 +2,16 @@
 
 A React component for positioning floating components such as tooltips, dropdowns, selects etc. Avoids screen edges!
 
-## [See some examples](#)
+* **[See some examples - coming soon](#)**
 
 ## Features
 - Handles all your bubble positioning
 - Avoids screen edges
+- Bubble size and position can be determined automatically, specified widths and heights not required
 - Built in support for positining of tails (those little pointy things at the bottom of tooltips)
-- Built in behaviour to open and close via hover or click, and to close via click-outside or ESC key.
+- Built in behaviour to open and close via hover or click, and to close via click-outside or ESC key
 - Can use its own state or can be controlled
-
-It uses React portals via [react-useportal](https://github.com/alex-cory/react-useportal).
+- Uses React portals via the [react-useportal](https://github.com/alex-cory/react-useportal) hook
 
 ## Installation
 
@@ -58,7 +58,7 @@ const Basic = (props) => {
 };
 ```
 
-[See more examples](#)
+[See more examples - coming soon](#)
 
 ## Props
 
@@ -83,7 +83,7 @@ It can handle click and hover events to control the open state of the bubble.
 If provided, this sets the kind of interaction that will open and close the bubble.
 
 #### align
-`string (optional)`
+`string (optional), default = "tc"`
 
 Sets the preferred positioning of the bubble relative to the anchor. Options are:
 
@@ -100,54 +100,40 @@ Sets the preferred positioning of the bubble relative to the anchor. Options are
 - `rc` - right centre
 - `rb` - right bottom
 
-Defaults to `tc`.
-
 ### gap
-`number (optional)`
+`number (optional), default = 10`
 
 The gap between the bubble and the anchor, in pixels.
 
-Defaults to `10`.
-
 ### edge
-`number (optional)`
+`number (optional), default = 10`
 
 How close the bubble is allowed to be posiitioned near a screen edge, in pixels.
 
-Defaults to `10`.
-
 ### zIndex
-`number (optional)`
+`number (optional), default = 100`
 
 The `zIndex` of the bubble element.
 
-Defaults to `100`.
-
 ### closeOnOutsideClick
-`boolean (optional)`
+`boolean (optional), default = true`
 
 A [react-useportal](https://github.com/alex-cory/react-useportal) option that lets the bubble close when you click outside of it.
 
-Defaults to `true`.
-
 ### closeOnEsc
-`boolean (optional)`
+`boolean (optional), default = true`
 
 A [react-useportal](https://github.com/alex-cory/react-useportal) option that lets the bubble close when you press the escape key.
-
-Defaults to `true`.
 
 ### tailSize
 `number (optional)`
 
-If a tail is used on your bubble, `tailSize` must be set so FloatyBox can adjust its positining.
+If a tail is used on your bubble, `tailSize` must be set so FloatyBox can adjust its positioning.
 
 ### wrap
-`React.Component (optional)`
+`React.Component (optional), default = "span"`
 
 The component that the FloatyBox anchor gets wrapped in.
-
-Defaults to `span`.
 
 ### isOpen
 `boolean (optional)`
