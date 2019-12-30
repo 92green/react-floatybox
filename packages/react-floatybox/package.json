@@ -29,12 +29,14 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.1.5",
+    "prop-types": "^15.7.2",
     "react-use-real-dimensions": "^0.0.1",
     "react-useportal": "^1.0.13"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
+    "babel-plugin-flow-react-proptypes": "^25.1.0",
     "babel-preset-blueflag": "^1.0.0",
     "blueflag-test": "^0.22.0",
     "react": "^16.9.0",
