@@ -1,23 +1,24 @@
 {
   "name": "react-floatybox-docs",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "React floatybox docs",
   "author": "Damien Clarke",
   "license": "MIT",
   "main": "n/a",
   "scripts": {
-    "prep": "yarn && yarn install-emcc",
-    "build": "gatsby build",
-    "watch": "gatsby develop",
-    "deploy": "gatsby build --prefix-paths && gh-pages -d public"
+    "build": "yarn gatsby build",
+    "watch": "yarn gatsby develop",
+    "deploy": "yarn gatsby build --prefix-paths && gh-pages -d public"
   },
   "dependencies": {
-    "dcme-gatsby": "^1.0.2",
-    "dcme-style": "^1.0.2",
-    "gatsby": "^2.13.20",
+    "dcme-gatsby": "^1.0.5",
+    "dcme-style": "^1.0.5",
+    "gatsby": "^2.16.5",
     "gatsby-plugin-compile-es6-packages": "^2.1.0",
     "gh-pages": "^1.1.0",
-    "react-floatybox": "0.0.0"
+    "react-floatybox": "^0.0.1",
+    "react-use-dimensions": "1.2.1",
+    "react-use-real-dimensions": "^0.0.1"
   }
 }
