@@ -1,7 +1,7 @@
 {
   "name": "react-use-real-dimensions",
   "version": "0.0.1",
-  "description": "...",
+  "description": "Like react-use-dimensions, but measures your elements in isolation, unconstrained by the rest of the page layout.",
   "main": "lib/useRealDimensions.js",
   "license": "MIT",
   "author": "Damien Clarke",

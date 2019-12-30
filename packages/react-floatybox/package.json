@@ -1,7 +1,7 @@
 {
   "name": "react-floatybox",
   "version": "0.0.2",
-  "description": "...",
+  "description": "A React component for positioning floating components such as tooltips, dropdowns, selects etc. Avoids screen edges!",
   "main": "lib/FloatyBox.js",
   "license": "MIT",
   "author": "Damien Clarke",
