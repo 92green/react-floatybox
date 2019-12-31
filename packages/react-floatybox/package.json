@@ -19,7 +19,8 @@
     "url": "git+https://github.com/dxinteractive/react-floatybox.git"
   },
   "files": [
-    "lib"
+    "lib",
+    "Point.js"
   ],
   "bugs": {
     "url": "https://github.com/dxinteractive/react-floatybox/issues"
