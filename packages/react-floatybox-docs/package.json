@@ -1,7 +1,7 @@
 {
   "name": "react-floatybox-docs",
   "private": true,
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "React floatybox docs",
   "author": "Damien Clarke",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "gatsby": "^2.16.5",
     "gatsby-plugin-compile-es6-packages": "^2.1.0",
     "gh-pages": "^1.1.0",
-    "react-floatybox": "^0.0.6",
+    "react-floatybox": "^0.0.7",
     "react-use-dimensions": "1.2.1",
     "react-use-real-dimensions": "^0.0.2"
   }
