@@ -170,4 +170,6 @@ All props passed to FloatyBox are also passed down to the bubble component.
 
 - Support for animations by adding an option to always render bubble
 - Option to auto close bubble when anchor moves off screen
+- Ease into new positions, rather than snapping directly
+- Add option to continually update, for when a FloatyBox is inside something that constantly moves
 - Allow `closeOnOutsideClick` and `closeOnEsc` to work when controlling state externally

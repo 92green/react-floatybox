@@ -90,6 +90,11 @@ export default () => {
             <Box mb={4}>
                 <Text>What about rolling your own <ColorPicker value={color} onChange={(color) => setColor(color)} /></Text>
             </Box>
+            <Box mb={4} style={{overflow: 'auto'}}>
+                <Box width="170%">
+                    <Text>Look at how it positions itself correctly inside of scrollable containers: <FloatyBox open="click" bubble={Tooltip}><Wow>click me!</Wow></FloatyBox></Text>
+                </Box>
+            </Box>
         </Box>
     </Page>;
 };
