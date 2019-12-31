@@ -83,7 +83,7 @@ const FloatyBox = (props: Props): Node => {
 
     let [windowWidth, windowHeight] = useWindowDimensions();
 
-    let [anchorRect] = useElementRect(portal.ref, [windowWidth, windowHeight]);
+    let [anchorRect] = useElementRect(portal.ref, [windowWidth, windowHeight, portal.isOpen]);
 
     let params = {
         bubbleWidth,
