@@ -16,14 +16,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dxinteractive/react-floatybox.git"
+    "url": "git+https://github.com/92green/react-floatybox.git"
   },
   "files": [
     "lib",
     "Point.js"
   ],
   "bugs": {
-    "url": "https://github.com/dxinteractive/react-floatybox/issues"
+    "url": "https://github.com/92green/react-floatybox/issues"
   },
   "private": false,
   "scripts": {
