@@ -1,26 +1,16 @@
 {
-  "name": "react-floatybox",
-  "version": "0.0.7",
-  "description": "A React component for positioning floating components such as tooltips, dropdowns, selects etc. Avoids screen edges!",
-  "main": "lib/FloatyBox.js",
+  "name": "react-use-real-dimensions",
+  "version": "0.0.2",
+  "description": "Like react-use-dimensions, but measures your elements in isolation, unconstrained by the rest of the page layout.",
+  "main": "lib/useRealDimensions.js",
   "license": "MIT",
   "author": "Damien Clarke",
-  "keywords": [
-    "react",
-    "tooltip",
-    "dropdown",
-    "position",
-    "float",
-    "fixed position",
-    "avoid screen edges"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/92green/react-floatybox.git"
   },
   "files": [
-    "lib",
-    "Point.js"
+    "lib"
   ],
   "bugs": {
     "url": "https://github.com/92green/react-floatybox/issues"
@@ -38,15 +28,11 @@
     "watch": "yarn run build -w"
   },
   "dependencies": {
-    "@babel/runtime": "^7.1.5",
-    "prop-types": "^15.7.2",
-    "react-use-real-dimensions": "^0.0.2",
-    "react-useportal": "^1.0.13"
+    "@babel/runtime": "^7.1.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
-    "babel-plugin-flow-react-proptypes": "^25.1.0",
     "babel-preset-blueflag": "^1.0.0",
     "blueflag-test": "^0.22.0",
     "react": "^16.9.0",
