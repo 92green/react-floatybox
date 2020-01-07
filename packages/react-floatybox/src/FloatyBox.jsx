@@ -1,5 +1,4 @@
 // @flow
-import type {ComponentType} from 'react';
 import type {Node} from 'react';
 
 import React from 'react';
@@ -17,8 +16,8 @@ import useRealDimensions from 'react-use-real-dimensions';
 type Props = {
     // components
     children: Node,
-    bubble: ComponentType<any>,
-    wrap: ComponentType<any>,
+    bubble: any,
+    wrap: any,
     // positioning
     align: string,
     gap: number,
@@ -31,7 +30,7 @@ type Props = {
     closeOnEsc?: boolean,
     // controlled state
     isOpen?: boolean,
-    onChange: (isOpen: boolean) => void
+    onChange?: (isOpen: boolean) => void
 };
 
 type Portal = {
