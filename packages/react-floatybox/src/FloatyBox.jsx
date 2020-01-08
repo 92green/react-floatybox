@@ -112,8 +112,8 @@ const FloatyBox = (props: Props): Node => {
 
     let controlledHandlers = {
         isOpen: props.isOpen,
-        openPortal: () => props.onChange(true),
-        closePortal: () => props.onChange(false)
+        openPortal: () => props.onChange && props.onChange(true),
+        closePortal: () => props.onChange && props.onChange(false)
     };
 
     // create React elements
