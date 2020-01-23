@@ -24,37 +24,52 @@ yarn add react-floatybox
 ### Basic
 
 ```js
+import React from 'react';
+import {useCallback} from 'react';
 import FloatyBox from 'react-floatybox';
 
-const Tooltip = (props) => <div>I am a tooltip</div>;
-
 const Basic = (props) => {
-    return <FloatyBox open="hover" bubble={Tooltip}>hover over me!</FloatyBox>;
+
+    let tooltip = useCallback(() => {
+        return <div>I am a tooltip</div>;
+    }, []);
+
+    return <FloatyBox open="hover" bubble={tooltip}>hover over me!</FloatyBox>;
 };
 ```
 
 ### With a tail
 
 ```js
+import React from 'react';
+import {useCallback} from 'react';
 import FloatyBox from 'react-floatybox';
 import Point from 'react-floatybox/Point';
 
-const Tooltip = (props) => <div>I am a tooltip <Point {...props.tailProps} color="#000" /></div>;
-
 const WithTail = (props) => {
-    return <FloatyBox open="hover" bubble={Tooltip} tailSize={20}>hover over me!</FloatyBox>
+
+    let tooltip = useCallback(({tailProps}) => {
+        return <div>I am a tooltip <Point {...tailProps} color="#000" /></div>;
+    }, []);
+
+    return <FloatyBox open="hover" bubble={tooltip} tailSize={20}>hover over me!</FloatyBox>
 };
 ```
 
 ### Alignment
 
 ```js
+import React from 'react';
+import {useCallback} from 'react';
 import FloatyBox from 'react-floatybox';
 
-const Tooltip = (props) => <div>I am a thing</div>;
-
 const Basic = (props) => {
-    return <FloatyBox open="click" align="lt" bubble={Tooltip}>click me!</FloatyBox>;
+
+    let tooltip = useCallback(() => {
+        return <div>I am a thing</div>;
+    }, []);
+
+    return <FloatyBox open="click" align="lt" bubble={tooltip}>click me!</FloatyBox>;
 };
 ```
 
@@ -65,9 +80,26 @@ const Basic = (props) => {
 ### Required
 
 #### bubble
-`React.Component`
+`({close, isOpen, tailProps}) => React.Node`
 
-The component to render as a floaty box.
+A function for FloatyBox to call to render the floaty box.
+It's recommended you wrap this in a `useCallback` hook to improve rendering performance.
+The function is passed an object with a few properties:
+
+##### close
+`() => void`
+
+A function that can be called from inside the bubble to close itself.
+
+##### isOpen
+`boolean`
+
+A boolean indicating if the bubble is open.
+
+##### tailProps
+`{side: string, size: number, style: Object}`
+
+An object that can be spread onto a tail component such as `react-floatybox/Point`.
 
 #### children
 `React.Node`
@@ -145,27 +177,6 @@ If provided, FloatyBox won't keep its own state and will just be open when this 
 
 If provided along with `isOpen`, this will be called when FloatyBox wants to change state.
 
-## Props passed to bubble
-
-### close
-`() => void`
-
-A function that can be called from inside the bubble to close itself.
-
-### isOpen
-`boolean`
-
-A boolean indicating if the bubble is open.
-
-### tailProps
-`{side: string, size: number, style: Object}`
-
-An object that can be spread onto a tail component such as `react-floatybox/Point`.
-
-### all other props
-
-All props passed to FloatyBox are also passed down to the bubble component.
-
 ## Todo
 
 - Support for animations by adding an option to always render bubble
@@ -173,3 +184,4 @@ All props passed to FloatyBox are also passed down to the bubble component.
 - Ease into new positions, rather than snapping directly
 - Add option to continually update, for when a FloatyBox is inside something that constantly moves
 - Allow `closeOnOutsideClick` and `closeOnEsc` to work when controlling state externally
+- Work out if its possible to not createReact portals until required when using react-useportal
