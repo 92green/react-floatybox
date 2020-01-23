@@ -237,7 +237,7 @@ const getFloatyStyle = (params) => {
 
             // position tail
             let tailHide = !inRange(pos, edge, maxEdge);
-            let tail = lerp(bubbleSize, -tailSize, axis[side]);
+            let tail = lerp(bubbleSize - 1, -tailSize + 1, axis[side]);
 
             return {
                 pos: clampedPos,
