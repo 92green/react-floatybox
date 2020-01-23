@@ -16,8 +16,9 @@ import useRealDimensions from 'react-use-real-dimensions';
 type Props = {
     // components
     children: Node,
-    bubble: any,
     wrap: any,
+    // element thunks
+    bubble: (bubbleParams: BubbleParams) => Node,
     // positioning
     align: string,
     gap: number,
@@ -39,6 +40,12 @@ type Portal = {
     ref: {
         current: ?HTMLElement
     }
+};
+
+type BubbleParams = {
+    close: () => any,
+    isOpen: boolean,
+    tailProps: any
 };
 
 const FloatyBox = (props: Props): Node => {
@@ -126,23 +133,32 @@ const FloatyBox = (props: Props): Node => {
         : props.children;
 
     let {Portal} = portal;
-    let Bubble = props.bubble;
+
+    let renderedBubble = useMemo(() => {
+        return props.bubble({
+            close: () => portal.closePortal(),
+            isOpen: portal.isOpen,
+            tailProps: {
+                side: realSide,
+                size: tailSize,
+                style: tailStyle
+            }
+        });
+    }, [
+        props.bubble,
+        realSide,
+        tailSize,
+        tailStyle,
+        portal.isOpen,
+        portal.closePortal
+    ]);
 
     return <>
         {children}
         {portal.isOpen &&
             <Portal>
                 <div style={bubbleStyle} ref={bubbleRef}>
-                    <Bubble
-                        close={() => portal.closePortal()}
-                        isOpen={portal.isOpen}
-                        tailProps={{
-                            side: realSide,
-                            size: tailSize,
-                            style: tailStyle
-                        }}
-                        {...props}
-                    />
+                    {renderedBubble}
                 </div>
             </Portal>
         }
