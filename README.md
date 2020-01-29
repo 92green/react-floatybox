@@ -4,6 +4,12 @@ A React component for positioning floating components such as tooltips, dropdown
 
 * **[See some examples - coming soon](#)**
 
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Props](#props)
+- [Development](#development)
+
 ## Features
 - Handles all your bubble positioning
 - Avoids screen edges
@@ -246,10 +252,9 @@ onChange?: (isOpen: boolean) => void (optional)` // optional
 
 If provided along with `isOpen`, this will be called when FloatyBox wants to change state.
 
-## Todo
+## Development
 
-- Support for animations by adding an option to always render bubble
-- Option to auto close bubble when anchor moves off screen
-- Ease into new positions, rather than snapping directly
-- Allow `closeOnOutsideClick` and `closeOnEsc` to work when controlling state externally
-- Allow multiple floatyboxes to share a tooltip
+React-floatybox is written and maintained by [Damien Clarke](https://damienclarke.me/), with feedback from others at [92green](https://github.com/92green).
+All online library discussion happens over on [Github](https://github.com/92green/react-floatybox).
+
+I hope this library helps solve some React positioning problems for you. 🎉
