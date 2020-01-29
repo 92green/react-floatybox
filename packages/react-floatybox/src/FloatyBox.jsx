@@ -27,7 +27,7 @@ type Props = {
     zIndex: number,
     tailSize: number,
     // interaction
-    open?: "click"|"hover",
+    open?: "click"|"hover"|"always",
     closeOnOutsideClick?: boolean,
     closeOnEsc?: boolean,
     // controlled state
@@ -75,20 +75,6 @@ const FloatyBox = (props: Props): Node => {
     // using outslide clicks and esc to close etc.
 
     let portal = usePortal({
-        onOpen({portal}) {
-            portal.current.style.cssText = `
-                z-index: ${props.zIndex.toFixed()};
-                position: fixed;
-                width: 200%;
-                height: 200%;
-                top: 0;
-                left: 0;
-                pointer-events: none;
-            `;
-        },
-        onClose({portal}) {
-            portal.current.style.cssText = ``;
-        },
         // these options must be false when controlled
         // or else usePortal()s state can become out of sync
         closeOnOutsideClick: isControlled ? false : props.closeOnOutsideClick,
@@ -99,7 +85,8 @@ const FloatyBox = (props: Props): Node => {
 
     let [windowWidth, windowHeight] = useWindowDimensions();
 
-    let [anchorRect] = useElementRect(portal.ref, [windowWidth, windowHeight, portal.isOpen]);
+    let updateElementRectWhenChanged = [windowWidth, windowHeight, portal.isOpen, props.open === 'always'];
+    let [anchorRect] = useElementRect(portal.ref, updateElementRectWhenChanged);
 
     let params = {
         bubbleWidth,
@@ -138,10 +125,6 @@ const FloatyBox = (props: Props): Node => {
     let Wrap = props.wrap;
     let handlers = createHandlers(props.open, isControlled ? controlledHandlers : portal);
 
-    let children = handlers
-        ? <Wrap {...handlers} ref={portal.ref}>{props.children}</Wrap>
-        : props.children;
-
     let {Portal} = portal;
 
     let renderedBubble = useMemo(() => {
@@ -163,9 +146,21 @@ const FloatyBox = (props: Props): Node => {
         portal.closePortal
     ]);
 
+    useEffect(() => {
+        portal.portalRef.current.style.cssText = `
+            z-index: ${props.zIndex.toFixed()};
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        `;
+    }, []);
+
     return <>
-        {children}
-        {portal.isOpen &&
+        <Wrap {...handlers} ref={portal.ref}>{props.children}</Wrap>
+        {(portal.isOpen || props.open === 'always') &&
             <Portal>
                 <div style={bubbleStyle} ref={bubbleRef}>
                     {renderedBubble}
@@ -380,10 +375,6 @@ const useElementRect = (ref, updateWhenChanged) => {
 const createHandlers = (open, portal) => {
     let {openPortal, closePortal, isOpen} = portal;
 
-    if(!open) {
-        return null;
-    }
-
     if(open === 'click') {
         return {
             onClick: isOpen ? closePortal : openPortal
@@ -396,5 +387,6 @@ const createHandlers = (open, portal) => {
             onMouseOut: closePortal
         };
     }
-    throw new Error('props.open must be set to "click", "hover" or not set');
+
+    return {};
 };

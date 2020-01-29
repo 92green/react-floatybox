@@ -11,6 +11,9 @@ A React component for positioning floating components such as tooltips, dropdown
 
 ## Demo
 
+Here you can test out how different props behave. Click or hover over the bluen square.
+Try scrolling the square out of view while it's open, or drag the square around to see how it moves near the edges of the screen.
+
 <DragMe />
 
 ---
@@ -121,7 +124,7 @@ The function is passed an object with a few properties:
 ### open
 
 ```flow
-open?: "click"|"hover" // optional
+open?: "click"|"hover"|"always" // optional
 ```
 
 If provided, this sets the kind of interaction that will open and close the bubble.
