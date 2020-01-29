@@ -77,49 +77,37 @@ const Basic = (props) => {
 
 ## Props
 
-### Required
-
-#### bubble
+### bubble
 `({close, isOpen, tailProps}) => React.Node`
 
 A function for FloatyBox to call to render the floaty box.
 It's recommended you wrap this in a `useCallback` hook to improve rendering performance.
 The function is passed an object with a few properties:
 
-##### close
-`() => void`
+|               |                                               |                                                                                     |
+| ------------- | --------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **close**     | `() => void`                                  | A function that can be called from inside the bubble to close itself.               |
+| **isOpen**    | `boolean`                                     | A boolean indicating if the bubble is open.                                         |
+| **tailProps** | `{side: string, size: number, style: Object}` | An object that can be spread onto a tail component such as `react-floatybox/Point`. |
 
-A function that can be called from inside the bubble to close itself.
 
-##### isOpen
-`boolean`
-
-A boolean indicating if the bubble is open.
-
-##### tailProps
-`{side: string, size: number, style: Object}`
-
-An object that can be spread onto a tail component such as `react-floatybox/Point`.
-
-#### children
+### children
 `React.Node`
 
 The React element that the bubble is tethered to, called the "anchor".
 It can handle click and hover events to control the open state of the bubble.
 
-### Optional
-
-#### open
+### open
 `"click"|"hover" (optional)`
 
 If provided, this sets the kind of interaction that will open and close the bubble.
 
-#### side
+### side
 `"top"|"bottom"|"left"|"right", default = "top"`
 
 Chooses the preferred side of the anchor that the bubble should appear on.
 
-#### align
+### align
 `string (optional), default = "center"`
 
 Sets the bubble's preferred perpendicular alignment.

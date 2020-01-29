@@ -12,11 +12,12 @@
     "deploy": "yarn gatsby build --prefix-paths && gh-pages -d public"
   },
   "dependencies": {
-    "dcme-gatsby": "^1.0.5",
-    "dcme-style": "^1.0.5",
+    "dcme-gatsby": "^1.0.8",
+    "dcme-style": "^1.1.7",
     "gatsby": "^2.16.5",
     "gatsby-plugin-compile-es6-packages": "^2.1.0",
     "gh-pages": "^1.1.0",
+    "react-dataparcels": "^1.0.2",
     "react-floatybox": "^0.2.0",
     "react-use-dimensions": "1.2.1",
     "react-use-real-dimensions": "^0.1.0"
