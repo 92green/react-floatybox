@@ -77,8 +77,20 @@ const Basic = (props) => {
 
 ## Props
 
+### children
+
+```flow
+children: React.Node
+```
+
+The React element that the bubble is tethered to, called the "anchor".
+It can handle click and hover events to control the open state of the bubble.
+
 ### bubble
-`({close, isOpen, tailProps}) => React.Node`
+
+```flow
+bubble: ({close, isOpen, tailProps}) => React.Node
+```
 
 A function for FloatyBox to call to render the floaty box.
 It's recommended you wrap this in a `useCallback` hook to improve rendering performance.
@@ -90,83 +102,147 @@ The function is passed an object with a few properties:
 | **isOpen**    | `boolean`                                     | A boolean indicating if the bubble is open.                                         |
 | **tailProps** | `{side: string, size: number, style: Object}` | An object that can be spread onto a tail component such as `react-floatybox/Point`. |
 
-
-### children
-`React.Node`
-
-The React element that the bubble is tethered to, called the "anchor".
-It can handle click and hover events to control the open state of the bubble.
-
 ### open
-`"click"|"hover"|"always" (optional)`
+
+```flow
+open?: "click"|"hover"|"always" // optional
+```
 
 If provided, this sets the kind of interaction that will open and close the bubble.
 
 ### side
-`"top"|"bottom"|"left"|"right", default = "top"`
+
+```flow
+side: "top"|"bottom"|"left"|"right" = "top"
+```
 
 Chooses the preferred side of the anchor that the bubble should appear on.
 
 ### align
-`string (optional), default = "center"`
 
-Sets the bubble's preferred perpendicular alignment.
+```flow
+align: string = "center"
+```
+
+Sets the bubble's preferred alignment in relation to its tail.
+
+- When `side` is `"top"` or `"bottom"`, valid values are `"center"`, `"left"` or `"right"`.
+- When `side` is `"left"` or `"right"`, valid values are `"center"`, `"up"` or `"down"`.
+
+### alignInner
+
+```flow
+alignInner: string = "center"
+```
+
+Sets the tail's preferred alignment in relation to the anchor.
+
+When building things with small anchors and large bubbles, such as tooltips, this prop is usually best on its default "center" setting. But if your anchor is larger than your bubble then this alignment becomes more useful.
+
 - When `side` is `"top"` or `"bottom"`, valid values are `"center"`, `"left"` or `"right"`.
 - When `side` is `"left"` or `"right"`, valid values are `"center"`, `"up"` or `"down"`.
 
 ### flip
-`boolean, default = false`
+
+```flow
+flip: boolean = false
+```
 
 Set to true to allow FloatyBox to flip the bubble to the opposite side of the anchor if there is not enough space to fit it on the preferred side.
 
+### slide
+
+```flow
+slide: boolean = false
+```
+
+Set to true to allow FloatyBox to slide the bubble across the side of the anchor if there is not enough space to fit it at the preferred alignment.
+
+### trap
+
+```flow
+trap: boolean = false
+```
+
+Trap will prevent the bubble from ever leaving the screen.
+
 ### gap
-`number (optional), default = 10`
+
+```flow
+gap: number = 10
+```
 
 The gap between the bubble and the anchor, in pixels.
 
 ### edge
-`number (optional), default = 10`
+
+```flow
+edge: number = 10
+```
 
 How close the bubble is allowed to be posiitioned near a screen edge, in pixels.
 
 ### zIndex
-`number (optional), default = 100`
+
+```flow
+zIndex: number = 100
+```
 
 The `zIndex` of the bubble element.
 
 ### closeOnOutsideClick
-`boolean (optional), default = true`
+
+```flow
+closeOnOutsideClick: boolean = true
+```
 
 A [react-useportal](https://github.com/alex-cory/react-useportal) option that lets the bubble close when you click outside of it.
 
 ### closeOnEsc
-`boolean (optional), default = true`
+
+```flow
+closeOnEsc: boolean = true
+```
 
 A [react-useportal](https://github.com/alex-cory/react-useportal) option that lets the bubble close when you press the escape key.
 
 ### tailSize
-`number (optional)`
+
+```flow
+tailSize?: number // optional
+```
 
 If a tail is used on your bubble, `tailSize` must be set so FloatyBox can adjust its positioning.
 
 ### wrap
-`React.Component (optional), default = "span"`
+
+```flow
+wrap: React.Component = "span"
+```
 
 The component that the FloatyBox anchor gets wrapped in.
 
 ### forceUpdate
 
-`Array<any> (optional) default = []`
+```flow
+forceUpdate: Array<any> = []
+```
 
 The forceUpdate prop allows you to force the bubble position to update. Pass it an array of values, and when any of these values change then the bubble position will be recalculated.
 
 ### isOpen
-`boolean (optional)`
+
+```flow
+isOpen?: boolean // optional
+```
 
 If provided, FloatyBox won't keep its own state and will just be open when this boolean is `true`.
 
 ### onChange
-`(isOpen: boolean) => void (optional)`
+
+```flow
+onChange?: (isOpen: boolean) => void (optional)` // optional
+```
 
 If provided along with `isOpen`, this will be called when FloatyBox wants to change state.
 
@@ -177,4 +253,3 @@ If provided along with `isOpen`, this will be called when FloatyBox wants to cha
 - Ease into new positions, rather than snapping directly
 - Allow `closeOnOutsideClick` and `closeOnEsc` to work when controlling state externally
 - Allow multiple floatyboxes to share a tooltip
-- Work out if its possible to not createReact portals until required when using react-useportal

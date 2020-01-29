@@ -26,7 +26,10 @@ type Props = {
     // positioning
     side: "top"|"bottom"|"left"|"right",
     align: "up"|"down"|"left"|"right"|"center",
+    alignInner: "up"|"down"|"left"|"right"|"center",
     flip: boolean,
+    slide: boolean,
+    trap: boolean,
     gap: number,
     edge: number,
     zIndex: number,
@@ -97,9 +100,10 @@ const FloatyBox = (props: Props): Node => {
 
     let [anchorRect] = useElementRect(portal.ref, updateElementRectWhenChanged);
 
-    let {flip, gap, edge, tailSize} = props;
+    let {flip, slide, trap, gap, edge, tailSize} = props;
     let side = getSideAlignLetter(props.side);
     let align = getSideAlignLetter(props.align);
+    let alignInner = getSideAlignLetter(props.alignInner);
 
     let params = {
         bubbleWidth,
@@ -112,10 +116,13 @@ const FloatyBox = (props: Props): Node => {
         anchorRight: anchorRect ? anchorRect.right : 0,
         side,
         align,
+        alignInner,
         gap,
         edge,
         tailSize,
-        flip
+        flip,
+        slide,
+        trap
     };
 
     let {bubbleStyle, tailStyle, realSide} = useMemo(
@@ -187,9 +194,12 @@ const FloatyBox = (props: Props): Node => {
 FloatyBox.defaultProps = {
     side: 'top',
     align: 'center',
+    alignInner: 'center',
     flip: false,
-    gap: 10,
-    edge: 10,
+    slide: false,
+    trap: false,
+    gap: 0,
+    edge: 0,
     wrap: 'span',
     zIndex: 100,
     tailSize: 0,
@@ -204,7 +214,6 @@ export default FloatyBox;
 
 const lerp = (a, b, amount) => a + (b - a) * amount;
 const clamp = (x, min, max) => Math.min(Math.max(x, min), max);
-const inRange = (x, min, max) => x >= min && x <= max;
 
 const X_AXIS = {l: 0, c: 0.5, r: 1};
 const Y_AXIS = {t: 0, c: 0.5, b: 1};
@@ -221,9 +230,13 @@ type GetFloatyStyleParams = {
     anchorRight: number,
     side: string,
     align: string,
+    alignInner: string,
     gap: number,
     edge: number,
-    tailSize: number
+    tailSize: number,
+    flip: boolean,
+    slide: boolean,
+    trap: boolean
 };
 
 type GetFloatyStyleResult = {
@@ -244,10 +257,13 @@ const getFloatyStyle = (params: GetFloatyStyleParams): GetFloatyStyleResult => {
         anchorRight,
         side,
         align,
+        alignInner,
         gap,
         edge,
         tailSize,
-        flip
+        flip,
+        slide,
+        trap
     } = params;
 
     // bubble measurement not yet taken, return blank styles for measuring the bubble with
@@ -263,6 +279,7 @@ const getFloatyStyle = (params: GetFloatyStyleParams): GetFloatyStyleResult => {
     let xResult = positionOnAxis(
         side,
         align,
+        alignInner,
         gap,
         edge,
         tailSize,
@@ -271,12 +288,15 @@ const getFloatyStyle = (params: GetFloatyStyleParams): GetFloatyStyleResult => {
         anchorRight,
         bubbleWidth,
         windowWidth,
-        flip
+        flip,
+        slide,
+        trap
     );
 
     let yResult = positionOnAxis(
         side,
         align,
+        alignInner,
         gap,
         edge,
         tailSize,
@@ -285,7 +305,9 @@ const getFloatyStyle = (params: GetFloatyStyleParams): GetFloatyStyleResult => {
         anchorBottom,
         bubbleHeight,
         windowHeight,
-        flip
+        flip,
+        slide,
+        trap
     );
 
     return {
@@ -320,6 +342,7 @@ type PositionOnAxisResult = {
 export const positionOnAxis = (
     side: string,
     align: string,
+    alignInner: string,
     gap: number,
     edge: number,
     tailSize: number,
@@ -328,57 +351,76 @@ export const positionOnAxis = (
     anchorEnd: number,
     bubbleSize: number,
     windowSize: number,
-    flip: boolean
+    flip: boolean,
+    slide: boolean,
+    trap: boolean
 ): PositionOnAxisResult => {
 
-    let anchorSize = anchorEnd - anchorStart;
-    let maxEdge = windowSize - bubbleSize - edge;
-
-    // if this is the main axis (the first letter of props.align)
+    // if this is the main axis a.k.a. props.side
     // then do this bit
     if(axis[side] !== undefined) {
-        // set position to either the close or far side of the bubble
+        // set position to the preferred side of the bubble
         let startPos = anchorStart - bubbleSize - gap;
         let endPos = anchorEnd + gap;
         let pos = lerp(startPos, endPos, axis[side]);
 
-        // flip side if there isnt enough room on preferred side
+        // if using flip, flip side if there isnt enough room on preferred side
         if(flip && pos < edge || pos + bubbleSize > windowSize - edge) {
-            side = FLIP_AXIS[side];
-            pos = lerp(startPos, endPos, axis[side]);
+            pos = lerp(endPos, startPos, axis[side]);
         }
 
-        // clamp position so the bubble doesnt get too close to screen edges
-        let clampedPos = clamp(pos, edge, maxEdge);
+        // if using trap, clamp position so the bubble doesnt leave screen edges
+        if(trap) {
+            pos = clamp(pos, edge, windowSize - bubbleSize - edge);
+        }
+
+        // if new positioning of bubble has made it flip sides, tell the tail to swap sides
+        let midBubble = pos + bubbleSize * 0.5;
+        let midAnchor = anchorStart + (anchorEnd - anchorStart) * 0.5;
+        if(midBubble > midAnchor === (axis[side] === 0)) {
+            side = FLIP_AXIS[side];
+        }
 
         // position tail
-        let tailHide = !inRange(pos, edge, maxEdge);
         let tail = lerp(bubbleSize - 1, -tailSize + 1, axis[side]);
 
         return {
-            pos: clampedPos,
+            pos,
             tail,
-            tailHide,
+            tailHide: false,
             side
         };
     }
 
-    // ...or else this is the cross axis (the second letter of props.align)
-    let pos = lerp(anchorEnd - bubbleSize + 1, anchorStart, axis[align]);
-    let tailSizeDiff = (tailSize - anchorSize) * 0.5;
+    // ...or else this is the cross axis a.k.a. props.align
+    let halfTail = tailSize * 0.5;
+    let innerPos = lerp(anchorStart + halfTail, anchorEnd - halfTail, axis[alignInner]);
+    let minPos = innerPos - bubbleSize + halfTail;
+    let maxPos = innerPos - halfTail;
+    let pos = lerp(minPos, maxPos, axis[align]);
 
-    // clamp position so there is always enough room for a tail
-    let clampedPos = clamp(pos, anchorEnd - bubbleSize + tailSizeDiff, anchorStart - tailSizeDiff);
+    // if using slide, slide bubble along if too close to screen edges
+    let tailHide = false;
+    if(slide) {
+        pos = clamp(pos, edge, windowSize - bubbleSize - edge);
 
-    // clamp position again so the bubble doesnt get too close to screen edges
-    clampedPos = clamp(clampedPos, edge, maxEdge);
+        // find out if the tail has detached
+        // and if trap is used, hide the tail
+        // or if trap is not used, move the bubble back so its attached again
+        if(pos < minPos || pos > maxPos) {
+            if(trap) {
+                tailHide = true;
+            } else {
+                pos = clamp(pos, minPos, maxPos);
+            }
+        }
+    }
 
     // position tail
-    let tail = anchorStart - clampedPos - tailSizeDiff;
-    let tailHide = !inRange(tail, 0, bubbleSize + tailSize);
+    let tail = (innerPos - halfTail) - pos;
 
     return {
-        pos: clampedPos,
+        pos,
         tail,
         tailHide,
         side: undefined

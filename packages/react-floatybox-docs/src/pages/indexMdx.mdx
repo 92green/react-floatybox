@@ -11,8 +11,8 @@ A React component for positioning floating components such as tooltips, dropdown
 
 ## Demo
 
-Here you can test out how different props behave. Click or hover over the bluen square.
-Try scrolling the square out of view while it's open, or drag the square around to see how it moves near the edges of the screen.
+Here you can test out how different props behave.
+Drag the square around, and try scrolling the square out of view to see how the various options make it respond when it's near the edges of the screen.
 
 <DragMe />
 
@@ -143,7 +143,21 @@ Chooses the preferred side of the anchor that the bubble should appear on.
 align: string = "center"
 ```
 
-Sets the bubble's preferred perpendicular alignment.
+Sets the bubble's preferred alignment in relation to its tail.
+
+- When `side` is `"top"` or `"bottom"`, valid values are `"center"`, `"left"` or `"right"`.
+- When `side` is `"left"` or `"right"`, valid values are `"center"`, `"up"` or `"down"`.
+
+### alignInner
+
+```flow
+alignInner: string = "center"
+```
+
+Sets the tail's preferred alignment in relation to the anchor.
+
+When building things with small anchors and large bubbles, such as tooltips, this prop is usually best on its default "center" setting. But if your anchor is larger than your bubble then this alignment becomes more useful.
+
 - When `side` is `"top"` or `"bottom"`, valid values are `"center"`, `"left"` or `"right"`.
 - When `side` is `"left"` or `"right"`, valid values are `"center"`, `"up"` or `"down"`.
 
@@ -155,6 +169,21 @@ flip: boolean = false
 
 Set to true to allow FloatyBox to flip the bubble to the opposite side of the anchor if there is not enough space to fit it on the preferred side.
 
+### slide
+
+```flow
+slide: boolean = false
+```
+
+Set to true to allow FloatyBox to slide the bubble across the side of the anchor if there is not enough space to fit it at the preferred alignment.
+
+### trap
+
+```flow
+trap: boolean = false
+```
+
+Trap will prevent the bubble from ever leaving the screen.
 
 ### gap
 
