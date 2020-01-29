@@ -8,7 +8,7 @@ A React component for positioning floating components such as tooltips, dropdown
 - Handles all your bubble positioning
 - Avoids screen edges
 - Bubble size and position can be determined automatically, specified widths and heights not required
-- Built in support for positining of tails (those little pointy things at the bottom of tooltips)
+- Built in support for positioning of tails (those little pointy things at the bottom of tooltips)
 - Built in behaviour to open and close via hover or click, and to close via click-outside or ESC key
 - Can use its own state or can be controlled
 - Uses React portals via the [react-useportal](https://github.com/alex-cory/react-useportal) hook
