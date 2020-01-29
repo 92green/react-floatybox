@@ -26,7 +26,7 @@ import ParcelBoundary from 'react-dataparcels/ParcelBoundary';
 
 const INITIAL_PROPS = {
     props: {
-        open: 'click',
+        open: 'always',
         tailSize: 20,
         side: 'top',
         align: 'center',
@@ -85,13 +85,13 @@ export const DragMe = styled((props: any) => {
 
     return <div className={props.className}>
         <Flex display={['block', 'flex']}>
-            <Box width="33%" mr={[null, 3]} mb={[3, null]}>
+            <Box width="33%" mr={[null, 3]} mb={[3, null]} p={[4,5]}>
                 <DragBox big={demoParcel.value.demo.big} floatyBoxProps={floatyBoxProps} />
             </Box>
             <Box width="33%" mr={[null, 3]} mb={[3, null]}>
                 <H4>Props</H4>
                 <ParcelBoundary parcel={demoParcel.getIn(['props','open'])}>
-                    {(parcel) => <InputRow label="open"><Select {...parcel.spreadDOM()} options={['click','hover']} /></InputRow>}
+                    {(parcel) => <InputRow label="open"><Select {...parcel.spreadDOM()} options={['always','click','hover']} /></InputRow>}
                 </ParcelBoundary>
                 <ParcelBoundary parcel={demoParcel.getIn(['props','side'])}>
                     {(parcel) => <InputRow label="side"><Select {...parcel.spreadDOM()} options={['top','bottom','left','right']} /></InputRow>}

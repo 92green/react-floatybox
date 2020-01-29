@@ -98,7 +98,7 @@ The React element that the bubble is tethered to, called the "anchor".
 It can handle click and hover events to control the open state of the bubble.
 
 ### open
-`"click"|"hover" (optional)`
+`"click"|"hover"|"always" (optional)`
 
 If provided, this sets the kind of interaction that will open and close the bubble.
 
