@@ -154,6 +154,12 @@ If a tail is used on your bubble, `tailSize` must be set so FloatyBox can adjust
 
 The component that the FloatyBox anchor gets wrapped in.
 
+### forceUpdate
+
+`Array<any> (optional) default = []`
+
+The forceUpdate prop allows you to force the bubble position to update. Pass it an array of values, and when any of these values change then the bubble position will be recalculated.
+
 ### isOpen
 `boolean (optional)`
 
@@ -169,8 +175,6 @@ If provided along with `isOpen`, this will be called when FloatyBox wants to cha
 - Support for animations by adding an option to always render bubble
 - Option to auto close bubble when anchor moves off screen
 - Ease into new positions, rather than snapping directly
-- Add option to continually update, for when a FloatyBox is inside something that constantly moves
-- Add option to manually update, such as on prop change
 - Allow `closeOnOutsideClick` and `closeOnEsc` to work when controlling state externally
 - Allow multiple floatyboxes to share a tooltip
 - Work out if its possible to not createReact portals until required when using react-useportal

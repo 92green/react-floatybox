@@ -26,7 +26,7 @@ import ParcelBoundary from 'react-dataparcels/ParcelBoundary';
 
 const INITIAL_PROPS = {
     props: {
-        open: 'always',
+        open: 'click',
         tailSize: 20,
         side: 'top',
         align: 'center',
@@ -171,17 +171,26 @@ const DragBox = (props: any): Node => {
         document.addEventListener('mousemove', mouseMove);
     }, [position]);
 
-    let style = position
-        ? {
+    let style = {};
+    let forceUpdate = [props.big, null, null];
+
+    if(position) {
+        style = {
             position: 'absolute',
             top: position.top,
             left: position.left,
             zIndex: 50
-        }
-        : {};
+        };
+
+        forceUpdate = [
+            props.big,
+            position.top,
+            position.left
+        ];
+    }
 
     return <div ref={ref} style={style} onMouseDown={onMouseDown}>
-        <FloatyBox {...props.floatyBoxProps}>
+        <FloatyBox {...props.floatyBoxProps} forceUpdate={forceUpdate}>
             <InnerBox big={props.big}></InnerBox>
         </FloatyBox>
     </div>;
