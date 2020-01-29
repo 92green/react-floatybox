@@ -401,7 +401,7 @@ export const positionOnAxis = (
 
     // if using slide, slide bubble along if too close to screen edges
     let tailHide = false;
-    if(slide) {
+    if(slide || trap) {
         pos = clamp(pos, edge, windowSize - bubbleSize - edge);
 
         // find out if the tail has detached
