@@ -365,7 +365,7 @@ export const positionOnAxis = (
         let pos = lerp(startPos, endPos, axis[side]);
 
         // if using flip, flip side if there isnt enough room on preferred side
-        if(flip && pos < edge || pos + bubbleSize > windowSize - edge) {
+        if(flip && (pos < edge || pos + bubbleSize > windowSize - edge)) {
             pos = lerp(endPos, startPos, axis[side]);
         }
 
