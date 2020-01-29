@@ -32,6 +32,7 @@ const INITIAL_PROPS = {
         align: 'center',
         gap: 10,
         edge: 10,
+        flip: true,
         wrap: 'div'
     },
     demo: {
@@ -98,6 +99,9 @@ export const DragMe = styled((props: any) => {
                 </ParcelBoundary>
                 <ParcelBoundary parcel={demoParcel.getIn(['props','align'])} forceUpdate={[alignOptions]}>
                     {(parcel) => <InputRow label="align"><Select {...parcel.spreadDOM()} options={alignOptions} /></InputRow>}
+                </ParcelBoundary>
+                <ParcelBoundary parcel={demoParcel.getIn(['props','flip'])}>
+                    {(parcel) => <InputRow label="flip"><Checkbox {...parcel.spreadDOMCheckbox()} /></InputRow>}
                 </ParcelBoundary>
                 <ParcelBoundary parcel={demoParcel.getIn(['props','gap'])}>
                     {(parcel) => <InputRow label="gap"><Input type="number" width="100%" {...parcel.spreadDOM()} /></InputRow>}

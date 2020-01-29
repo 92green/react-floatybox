@@ -26,6 +26,7 @@ type Props = {
     // positioning
     side: "top"|"bottom"|"left"|"right",
     align: "up"|"down"|"left"|"right"|"center",
+    flip: boolean,
     gap: number,
     edge: number,
     zIndex: number,
@@ -62,11 +63,6 @@ const FloatyBox = (props: Props): Node => {
         return str;
     };
 
-    let {gap, edge, tailSize} = props;
-    let side = getSideAlignLetter(props.side);
-    let align = getSideAlignLetter(props.align);
-
-
     let isControlled = typeof props.isOpen === 'boolean';
 
     // set up element measurement
@@ -92,6 +88,10 @@ const FloatyBox = (props: Props): Node => {
     let updateElementRectWhenChanged = [windowWidth, windowHeight, portal.isOpen, props.open === 'always'];
     let [anchorRect] = useElementRect(portal.ref, updateElementRectWhenChanged);
 
+    let {flip, gap, edge, tailSize} = props;
+    let side = getSideAlignLetter(props.side);
+    let align = getSideAlignLetter(props.align);
+
     let params = {
         bubbleWidth,
         bubbleHeight,
@@ -105,7 +105,8 @@ const FloatyBox = (props: Props): Node => {
         align,
         gap,
         edge,
-        tailSize
+        tailSize,
+        flip
     };
 
     let {bubbleStyle, tailStyle, realSide} = useMemo(
@@ -177,6 +178,7 @@ const FloatyBox = (props: Props): Node => {
 FloatyBox.defaultProps = {
     side: 'top',
     align: 'center',
+    flip: false,
     gap: 10,
     edge: 10,
     wrap: 'span',
@@ -234,7 +236,8 @@ const getFloatyStyle = (params: GetFloatyStyleParams): GetFloatyStyleResult => {
         align,
         gap,
         edge,
-        tailSize
+        tailSize,
+        flip
     } = params;
 
     // bubble measurement not yet taken, return blank styles for measuring the bubble with
@@ -257,7 +260,8 @@ const getFloatyStyle = (params: GetFloatyStyleParams): GetFloatyStyleResult => {
         anchorLeft,
         anchorRight,
         bubbleWidth,
-        windowWidth
+        windowWidth,
+        flip
     );
 
     let yResult = positionOnAxis(
@@ -270,7 +274,8 @@ const getFloatyStyle = (params: GetFloatyStyleParams): GetFloatyStyleResult => {
         anchorTop,
         anchorBottom,
         bubbleHeight,
-        windowHeight
+        windowHeight,
+        flip
     );
 
     return {
@@ -312,7 +317,8 @@ export const positionOnAxis = (
     anchorStart: number,
     anchorEnd: number,
     bubbleSize: number,
-    windowSize: number
+    windowSize: number,
+    flip: boolean
 ): PositionOnAxisResult => {
 
     let anchorSize = anchorEnd - anchorStart;
@@ -327,7 +333,7 @@ export const positionOnAxis = (
         let pos = lerp(startPos, endPos, axis[side]);
 
         // flip side if there isnt enough room on preferred side
-        if(pos < edge || pos + bubbleSize > windowSize - edge) {
+        if(flip && pos < edge || pos + bubbleSize > windowSize - edge) {
             side = FLIP_AXIS[side];
             pos = lerp(startPos, endPos, axis[side]);
         }
