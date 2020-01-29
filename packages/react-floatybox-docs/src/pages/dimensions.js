@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Page from 'component/Page';
-import {H2} from 'dcme-style';
+import {H1} from 'dcme-style';
 import {Box} from 'dcme-style/layout';
 import {Text} from 'dcme-style/affordance';
 import {Link} from 'dcme-style/affordance';
@@ -25,8 +25,8 @@ export default () => {
     return <Page>
         <Box p={[3,4]} maxWidth="800px" margin="0 auto">
             <Box mb={5}>
-                <Box mb={2}>
-                    <H2>react-use-real-dimensions 🕊️↔😌</H2>
+                <Box>
+                    <H1>react-use-real-dimensions 🕊️↔😌</H1>
                 </Box>
                 <Text textStyle="monospace">See also <Link to="/">react-floatybox</Link></Text>
             </Box>
