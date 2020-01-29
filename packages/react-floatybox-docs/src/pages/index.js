@@ -67,20 +67,22 @@ export default () => {
                 <Text>Control the state yourself <FloatyBox open="click" isOpen={isOpen} onChange={setOpen} bubble={tooltip}><Wow>like this!</Wow></FloatyBox></Text>
             </Box>
             <Box mb={4}>
-                <Text>Positioning is easy, just do </Text>
+                <Text>Positioning is easy, just use the <Wow>side</Wow> and <Wow>align</Wow> props.</Text>
+            </Box>
+            <Box mb={4}>
                 <Text>
-                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} align="tl"><Wow>tl</Wow></FloatyBox><Text> or </Text>
-                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} align="tc"><Wow>tc</Wow></FloatyBox><Text> or </Text>
-                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} align="tr"><Wow>tr</Wow></FloatyBox><Text> or </Text>
-                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} align="bl"><Wow>bl</Wow></FloatyBox><Text> or </Text>
-                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} align="bc"><Wow>bc</Wow></FloatyBox><Text> or </Text>
-                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} align="br"><Wow>br</Wow></FloatyBox><Text> or </Text>
-                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} align="lt"><Wow>lt</Wow></FloatyBox><Text> or </Text>
-                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} align="lc"><Wow>lc</Wow></FloatyBox><Text> or </Text>
-                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} align="lb"><Wow>lb</Wow></FloatyBox><Text> or </Text>
-                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} align="rt"><Wow>rt</Wow></FloatyBox><Text> or </Text>
-                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} align="rc"><Wow>rc</Wow></FloatyBox><Text> or </Text>
-                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} align="rb"><Wow>rb</Wow></FloatyBox><Text> or whatever.</Text>
+                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} side="top"><Wow>top</Wow></FloatyBox><Text> or </Text>
+                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} side="top" align="left"><Wow>top / left</Wow></FloatyBox><Text> or </Text>
+                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} side="top" align="right"><Wow>top / right</Wow></FloatyBox><Text> or </Text>
+                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} side="bottom"><Wow>bottom</Wow></FloatyBox><Text> or </Text>
+                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} side="bottom" align="left"><Wow>bottom / left</Wow></FloatyBox><Text> or </Text>
+                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} side="bottom" align="right"><Wow>bottom / right</Wow></FloatyBox><Text> or </Text>
+                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} side="left"><Wow>left</Wow></FloatyBox><Text> or </Text>
+                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} side="left" align="up"><Wow>left / up</Wow></FloatyBox><Text> or </Text>
+                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} side="left" align="down"><Wow>left / down</Wow></FloatyBox><Text> or </Text>
+                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} side="right"><Wow>right</Wow></FloatyBox><Text> or </Text>
+                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} side="right" align="up"><Wow>right / up</Wow></FloatyBox><Text> or </Text>
+                    <FloatyBox open="click" bubble={tooltipWithTail} tailSize={20} side="right" align="down"><Wow>right / down</Wow></FloatyBox><Text> or whatever.</Text>
                 </Text>
             </Box>
             <Box mb={4}>

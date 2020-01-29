@@ -69,7 +69,7 @@ const Basic = (props) => {
         return <div>I am a thing</div>;
     }, []);
 
-    return <FloatyBox open="click" align="lt" bubble={tooltip}>click me!</FloatyBox>;
+    return <FloatyBox open="click" side="top" align="left" bubble={tooltip}>click me!</FloatyBox>;
 };
 ```
 
@@ -114,23 +114,17 @@ It can handle click and hover events to control the open state of the bubble.
 
 If provided, this sets the kind of interaction that will open and close the bubble.
 
+#### side
+`"top"|"bottom"|"left"|"right", default = "top"`
+
+Chooses the preferred side of the anchor that the bubble should appear on.
+
 #### align
-`string (optional), default = "tc"`
+`string (optional), default = "center"`
 
-Sets the preferred positioning of the bubble relative to the anchor. Options are:
-
-- `tl` - top left
-- `tc` - top centre
-- `tr` - top right
-- `bl` - bottom left
-- `bc` - bottom centre
-- `br` - bottom right
-- `lt` - left top
-- `lc` - left centre
-- `lb` - left bottom
-- `rt` - right top
-- `rc` - right centre
-- `rb` - right bottom
+Sets the bubble's preferred perpendicular alignment.
+- When `side` is `"top"` or `"bottom"`, valid values are `"center"`, `"left"` or `"right"`.
+- When `side` is `"left"` or `"right"`, valid values are `"center"`, `"up"` or `"down"`.
 
 ### gap
 `number (optional), default = 10`
@@ -183,5 +177,7 @@ If provided along with `isOpen`, this will be called when FloatyBox wants to cha
 - Option to auto close bubble when anchor moves off screen
 - Ease into new positions, rather than snapping directly
 - Add option to continually update, for when a FloatyBox is inside something that constantly moves
+- Add option to manually update, such as on prop change
 - Allow `closeOnOutsideClick` and `closeOnEsc` to work when controlling state externally
+- Allow multiple floatyboxes to share a tooltip
 - Work out if its possible to not createReact portals until required when using react-useportal

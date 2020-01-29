@@ -20,7 +20,8 @@ type Props = {
     // element thunks
     bubble: (bubbleParams: BubbleParams) => Node,
     // positioning
-    align: string,
+    side: "top"|"bottom"|"left"|"right",
+    align: "up"|"down"|"left"|"right"|"center",
     gap: number,
     edge: number,
     zIndex: number,
@@ -50,8 +51,17 @@ type BubbleParams = {
 
 const FloatyBox = (props: Props): Node => {
 
-    let [side, align] = props.align.split('');
+    let getSideAlignLetter = (str: string): string => {
+        str = str[0];
+        if(str === 'u') return 't';
+        if(str === 'd') return 'b';
+        return str;
+    };
+
     let {gap, edge, tailSize} = props;
+    let side = getSideAlignLetter(props.side);
+    let align = getSideAlignLetter(props.align);
+
 
     let isControlled = typeof props.isOpen === 'boolean';
 
@@ -166,7 +176,8 @@ const FloatyBox = (props: Props): Node => {
 };
 
 FloatyBox.defaultProps = {
-    align: 'tc',
+    side: 'top',
+    align: 'center',
     gap: 10,
     edge: 10,
     wrap: 'span',
