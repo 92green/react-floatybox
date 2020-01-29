@@ -175,7 +175,8 @@ const DragBox = (props: any): Node => {
         ? {
             position: 'absolute',
             top: position.top,
-            left: position.left
+            left: position.left,
+            zIndex: 50
         }
         : {};
 
