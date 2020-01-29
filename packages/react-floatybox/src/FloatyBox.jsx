@@ -35,6 +35,8 @@ type Props = {
     open?: "click"|"hover"|"always",
     closeOnOutsideClick?: boolean,
     closeOnEsc?: boolean,
+    // update control
+    forceUpdate: any[],
     // controlled state
     isOpen?: boolean,
     onChange?: (isOpen: boolean) => void
@@ -85,7 +87,14 @@ const FloatyBox = (props: Props): Node => {
 
     let [windowWidth, windowHeight] = useWindowDimensions();
 
-    let updateElementRectWhenChanged = [windowWidth, windowHeight, portal.isOpen, props.open === 'always'];
+    let updateElementRectWhenChanged = [
+        windowWidth,
+        windowHeight,
+        portal.isOpen,
+        props.open === 'always',
+        ...props.forceUpdate
+    ];
+
     let [anchorRect] = useElementRect(portal.ref, updateElementRectWhenChanged);
 
     let {flip, gap, edge, tailSize} = props;
@@ -111,7 +120,7 @@ const FloatyBox = (props: Props): Node => {
 
     let {bubbleStyle, tailStyle, realSide} = useMemo(
         () => getFloatyStyle(params),
-        Object.keys(params).map(key => params[key])
+        Object.keys(params).map(key => params[key]).concat(props.forceUpdate)
     );
 
     // floatybox can be controlled
@@ -183,7 +192,8 @@ FloatyBox.defaultProps = {
     edge: 10,
     wrap: 'span',
     zIndex: 100,
-    tailSize: 0
+    tailSize: 0,
+    forceUpdate: []
 };
 
 export default FloatyBox;
