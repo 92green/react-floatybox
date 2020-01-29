@@ -26,17 +26,21 @@ import ParcelBoundary from 'react-dataparcels/ParcelBoundary';
 
 const INITIAL_PROPS = {
     props: {
-        open: 'click',
+        open: 'always',
         tailSize: 20,
         side: 'top',
         align: 'center',
+        alignInner: 'center',
         gap: 10,
         edge: 10,
         flip: true,
+        slide: true,
+        trap: false,
         wrap: 'div'
     },
     demo: {
-        big: false
+        big: false,
+        tail: true
     }
 };
 
@@ -67,17 +71,20 @@ export const DragMe = styled((props: any) => {
         beforeChange: (value) => {
             if(!getAlignOptions(value.props.side).includes(value.props.align)) {
                 value.props.align = 'center';
+                value.props.alignInner = 'center';
             }
             return value;
         }
     });
 
     let bubble = useCallback(({tailProps}) => {
-        return <Tooltip>I am a tooltip <Point {...tailProps} color="#000" /></Tooltip>;
-    }, []);
+        return <Tooltip>I am a tooltip {demoParcel.value.demo.tail && <Point {...tailProps} color="#000" />}</Tooltip>;
+    }, [demoParcel.value.demo.tail]);
 
     let floatyBoxProps = {
         ...demoParcel.value.props,
+        gap: Number(demoParcel.value.props.gap),
+        edge: demoParcel.value.props.edge === '' ? undefined : Number(demoParcel.value.props.edge),
         tailSize: Number(demoParcel.value.props.tailSize),
         bubble
     };
@@ -100,8 +107,17 @@ export const DragMe = styled((props: any) => {
                 <ParcelBoundary parcel={demoParcel.getIn(['props','align'])} forceUpdate={[alignOptions]}>
                     {(parcel) => <InputRow label="align"><Select {...parcel.spreadDOM()} options={alignOptions} /></InputRow>}
                 </ParcelBoundary>
+                <ParcelBoundary parcel={demoParcel.getIn(['props','alignInner'])} forceUpdate={[alignOptions]}>
+                    {(parcel) => <InputRow label="alignInner"><Select {...parcel.spreadDOM()} options={alignOptions} /></InputRow>}
+                </ParcelBoundary>
                 <ParcelBoundary parcel={demoParcel.getIn(['props','flip'])}>
                     {(parcel) => <InputRow label="flip"><Checkbox {...parcel.spreadDOMCheckbox()} /></InputRow>}
+                </ParcelBoundary>
+                <ParcelBoundary parcel={demoParcel.getIn(['props','slide'])}>
+                    {(parcel) => <InputRow label="slide"><Checkbox {...parcel.spreadDOMCheckbox()} /></InputRow>}
+                </ParcelBoundary>
+                <ParcelBoundary parcel={demoParcel.getIn(['props','trap'])}>
+                    {(parcel) => <InputRow label="trap"><Checkbox {...parcel.spreadDOMCheckbox()} /></InputRow>}
                 </ParcelBoundary>
                 <ParcelBoundary parcel={demoParcel.getIn(['props','gap'])}>
                     {(parcel) => <InputRow label="gap"><Input type="number" width="100%" {...parcel.spreadDOM()} /></InputRow>}
@@ -118,13 +134,15 @@ export const DragMe = styled((props: any) => {
                 <ParcelBoundary parcel={demoParcel.getIn(['demo','big'])}>
                     {(parcel) => <InputRow label="big"><Checkbox {...parcel.spreadDOMCheckbox()} /></InputRow>}
                 </ParcelBoundary>
+                <ParcelBoundary parcel={demoParcel.getIn(['demo','tail'])}>
+                    {(parcel) => <InputRow label="tail"><Checkbox {...parcel.spreadDOMCheckbox()} /></InputRow>}
+                </ParcelBoundary>
             </Box>
         </Flex>
     </div>;
 })`
     border: 1px dashed ${props => props.theme.colors.line};
     width: 100%;
-    height: 20rem;
     padding: 1rem;
 `;
 
