@@ -1105,6 +1105,12 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.1.5":
+  version "7.8.3"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.8.3.tgz#0811944f73a6c926bb2ad35e918dcc1bfab279f1"
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/runtime@^7.7.2":
   version "7.7.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.7.2.tgz#111a78002a5c25fc8e3361bedc9529c696b85a6a"
@@ -4059,6 +4065,13 @@ data-urls@^1.0.0:
 dataloader@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/dataloader/-/dataloader-1.4.0.tgz#bca11d867f5d3f1b9ed9f737bd15970c65dff5c8"
+
+dataparcels@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/dataparcels/-/dataparcels-1.0.2.tgz#49f78792c4b251f048c8ac89ab99e750c5d7e1b1"
+  dependencies:
+    "@babel/runtime" "^7.1.5"
+    unmutable "^0.46.1"
 
 date-now@^0.1.4:
   version "0.1.4"
@@ -10813,6 +10826,16 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-dataparcels@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-dataparcels/-/react-dataparcels-1.0.2.tgz#4f866c91bebdf661d97889fb74cbccc53bcfe464"
+  dependencies:
+    "@babel/runtime" "^7.1.5"
+    dataparcels "^1.0.2"
+    is-promise "^2.1.0"
+    unmutable "^0.46.1"
+    use-debounce "^1.1.3"
+
 react-dev-utils@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-4.2.3.tgz#5b42d9ea58d5e9e017a2f57a40a8af408a3a46fb"
@@ -13176,6 +13199,15 @@ unmutable@^0.34.1:
     is-plain-object "^2.0.4"
     lodash.range "^3.2.0"
 
+unmutable@^0.46.1:
+  version "0.46.1"
+  resolved "https://registry.yarnpkg.com/unmutable/-/unmutable-0.46.1.tgz#af1e4c5bec4905bd8d288be45bd215f7e4d5ccb1"
+  dependencies:
+    "@babel/runtime" "^7.1.5"
+    fast-deep-equal "^1.0.0"
+    is-plain-object "^2.0.4"
+    lodash.range "^3.2.0"
+
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
@@ -13275,6 +13307,10 @@ url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+use-debounce@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-1.1.3.tgz#08b76fd8cc9b107e0a6d6ee8bb6c5fe97a14732f"
 
 use@^3.1.0:
   version "3.1.1"

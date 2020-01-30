@@ -13,6 +13,10 @@ import {useMemo} from 'react';
 import usePortal from 'react-useportal';
 import useRealDimensions from 'react-use-real-dimensions';
 
+//
+// floatybox component
+//
+
 type Props = {
     // components
     children: Node,
@@ -20,15 +24,22 @@ type Props = {
     // element thunks
     bubble: (bubbleParams: BubbleParams) => Node,
     // positioning
-    align: string,
+    side: "top"|"bottom"|"left"|"right",
+    align: "up"|"down"|"left"|"right"|"center",
+    alignInner: "up"|"down"|"left"|"right"|"center",
+    flip: boolean,
+    slide: boolean,
+    trap: boolean,
     gap: number,
     edge: number,
     zIndex: number,
     tailSize: number,
     // interaction
-    open?: "click"|"hover",
+    open?: "click"|"hover"|"always",
     closeOnOutsideClick?: boolean,
     closeOnEsc?: boolean,
+    // update control
+    forceUpdate: any[],
     // controlled state
     isOpen?: boolean,
     onChange?: (isOpen: boolean) => void
@@ -50,8 +61,12 @@ type BubbleParams = {
 
 const FloatyBox = (props: Props): Node => {
 
-    let [side, align] = props.align.split('');
-    let {gap, edge, tailSize} = props;
+    let getSideAlignLetter = (str: string): string => {
+        str = str[0];
+        if(str === 'u') return 't';
+        if(str === 'd') return 'b';
+        return str;
+    };
 
     let isControlled = typeof props.isOpen === 'boolean';
 
@@ -65,20 +80,6 @@ const FloatyBox = (props: Props): Node => {
     // using outslide clicks and esc to close etc.
 
     let portal = usePortal({
-        onOpen({portal}) {
-            portal.current.style.cssText = `
-                z-index: ${props.zIndex.toFixed()};
-                position: fixed;
-                width: 200%;
-                height: 200%;
-                top: 0;
-                left: 0;
-                pointer-events: none;
-            `;
-        },
-        onClose({portal}) {
-            portal.current.style.cssText = ``;
-        },
         // these options must be false when controlled
         // or else usePortal()s state can become out of sync
         closeOnOutsideClick: isControlled ? false : props.closeOnOutsideClick,
@@ -89,7 +90,20 @@ const FloatyBox = (props: Props): Node => {
 
     let [windowWidth, windowHeight] = useWindowDimensions();
 
-    let [anchorRect] = useElementRect(portal.ref, [windowWidth, windowHeight, portal.isOpen]);
+    let updateElementRectWhenChanged = [
+        windowWidth,
+        windowHeight,
+        portal.isOpen,
+        props.open === 'always',
+        ...props.forceUpdate
+    ];
+
+    let [anchorRect] = useElementRect(portal.ref, updateElementRectWhenChanged);
+
+    let {flip, slide, trap, gap, edge, tailSize} = props;
+    let side = getSideAlignLetter(props.side);
+    let align = getSideAlignLetter(props.align);
+    let alignInner = getSideAlignLetter(props.alignInner);
 
     let params = {
         bubbleWidth,
@@ -102,14 +116,18 @@ const FloatyBox = (props: Props): Node => {
         anchorRight: anchorRect ? anchorRect.right : 0,
         side,
         align,
+        alignInner,
         gap,
         edge,
-        tailSize
+        tailSize,
+        flip,
+        slide,
+        trap
     };
 
     let {bubbleStyle, tailStyle, realSide} = useMemo(
         () => getFloatyStyle(params),
-        Object.keys(params).map(key => params[key])
+        Object.keys(params).map(key => params[key]).concat(props.forceUpdate)
     );
 
     // floatybox can be controlled
@@ -127,10 +145,6 @@ const FloatyBox = (props: Props): Node => {
 
     let Wrap = props.wrap;
     let handlers = createHandlers(props.open, isControlled ? controlledHandlers : portal);
-
-    let children = handlers
-        ? <Wrap {...handlers} ref={portal.ref}>{props.children}</Wrap>
-        : props.children;
 
     let {Portal} = portal;
 
@@ -153,9 +167,21 @@ const FloatyBox = (props: Props): Node => {
         portal.closePortal
     ]);
 
+    useEffect(() => {
+        portal.portalRef.current.style.cssText = `
+            z-index: ${props.zIndex.toFixed()};
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        `;
+    }, []);
+
     return <>
-        {children}
-        {portal.isOpen &&
+        <Wrap {...handlers} ref={portal.ref}>{props.children}</Wrap>
+        {(portal.isOpen || props.open === 'always') &&
             <Portal>
                 <div style={bubbleStyle} ref={bubbleRef}>
                     {renderedBubble}
@@ -166,23 +192,60 @@ const FloatyBox = (props: Props): Node => {
 };
 
 FloatyBox.defaultProps = {
-    align: 'tc',
-    gap: 10,
-    edge: 10,
+    side: 'top',
+    align: 'center',
+    alignInner: 'center',
+    flip: false,
+    slide: false,
+    trap: false,
+    gap: 0,
+    edge: 0,
     wrap: 'span',
     zIndex: 100,
-    tailSize: 0
+    tailSize: 0,
+    forceUpdate: []
 };
 
 export default FloatyBox;
 
+//
 // positioning maths
+//
 
-let lerp = (a, b, amount) => a + (b - a) * amount;
-let clamp = (x, min, max) => Math.min(Math.max(x, min), max);
-let inRange = (x, min, max) => x >= min && x <= max;
+const lerp = (a, b, amount) => a + (b - a) * amount;
+const clamp = (x, min, max) => Math.min(Math.max(x, min), max);
 
-const getFloatyStyle = (params) => {
+const X_AXIS = {l: 0, c: 0.5, r: 1};
+const Y_AXIS = {t: 0, c: 0.5, b: 1};
+const FLIP_AXIS = {l: 'r', r: 'l', t: 'b', b: 't'};
+
+type GetFloatyStyleParams = {
+    bubbleWidth?: number,
+    bubbleHeight?: number,
+    windowWidth: number,
+    windowHeight: number,
+    anchorTop: number,
+    anchorBottom: number,
+    anchorLeft: number,
+    anchorRight: number,
+    side: string,
+    align: string,
+    alignInner: string,
+    gap: number,
+    edge: number,
+    tailSize: number,
+    flip: boolean,
+    slide: boolean,
+    trap: boolean
+};
+
+type GetFloatyStyleResult = {
+    bubbleStyle: any,
+    tailStyle: any,
+    realSide?: string
+};
+
+const getFloatyStyle = (params: GetFloatyStyleParams): GetFloatyStyleResult => {
     let {
         bubbleWidth,
         bubbleHeight,
@@ -194,13 +257,17 @@ const getFloatyStyle = (params) => {
         anchorRight,
         side,
         align,
+        alignInner,
         gap,
         edge,
-        tailSize
+        tailSize,
+        flip,
+        slide,
+        trap
     } = params;
 
     // bubble measurement not yet taken, return blank styles for measuring the bubble with
-    if(params.bubbleHeight === undefined || params.bubbleWidth === undefined) {
+    if(bubbleHeight === undefined || bubbleWidth === undefined) {
         return {
             bubbleStyle: {},
             tailStyle: {
@@ -209,68 +276,39 @@ const getFloatyStyle = (params) => {
         };
     }
 
-    let xAxis = {l: 0, c: 0.5, r: 1};
-    let yAxis = {t: 0, c: 0.5, b: 1};
-    let flip = {l: 'r', r: 'l', t: 'b', b: 't'};
+    let xResult = positionOnAxis(
+        side,
+        align,
+        alignInner,
+        gap,
+        edge,
+        tailSize,
+        X_AXIS,
+        anchorLeft,
+        anchorRight,
+        bubbleWidth,
+        windowWidth,
+        flip,
+        slide,
+        trap
+    );
 
-    let calc = (axis, anchorStart, anchorEnd, bubbleSize, windowSize) => {
-
-        let anchorSize = anchorEnd - anchorStart;
-        let maxEdge = windowSize - bubbleSize - edge;
-
-        // if this is the main axis (the first letter of props.align)
-        // then do this bit
-        if(axis[side] !== undefined) {
-            // set position to either the close or far side of the bubble
-            let startPos = anchorStart - bubbleSize - gap;
-            let endPos = anchorEnd + gap;
-            let pos = lerp(startPos, endPos, axis[side]);
-
-            // flip side if there isnt enough room on preferred side
-            if(pos < edge || pos + bubbleSize > windowSize - edge) {
-                side = flip[side];
-                pos = lerp(startPos, endPos, axis[side]);
-            }
-
-            // clamp position so the bubble doesnt get too close to screen edges
-            let clampedPos = clamp(pos, edge, maxEdge);
-
-            // position tail
-            let tailHide = !inRange(pos, edge, maxEdge);
-            let tail = lerp(bubbleSize - 1, -tailSize + 1, axis[side]);
-
-            return {
-                pos: clampedPos,
-                tail,
-                tailHide,
-                side
-            };
-        }
-
-        // ...or else this is the cross axis (the second letter of props.align)
-        let pos = lerp(anchorEnd - bubbleSize + 1, anchorStart, axis[align]);
-        let tailSizeDiff = (tailSize - anchorSize) * 0.5;
-
-        // clamp position so there is always enough room for a tail
-        let clampedPos = clamp(pos, anchorEnd - bubbleSize + tailSizeDiff, anchorStart - tailSizeDiff);
-
-        // clamp position again so the bubble doesnt get too close to screen edges
-        clampedPos = clamp(clampedPos, edge, maxEdge);
-
-        // position tail
-        let tail = anchorStart - clampedPos - tailSizeDiff;
-        let tailHide = !inRange(tail, 0, bubbleSize + tailSize);
-
-        return {
-            pos: clampedPos,
-            tail,
-            tailHide,
-            side: undefined
-        };
-    };
-
-    let xResult = calc(xAxis, anchorLeft, anchorRight, bubbleWidth, windowWidth);
-    let yResult = calc(yAxis, anchorTop, anchorBottom, bubbleHeight, windowHeight);
+    let yResult = positionOnAxis(
+        side,
+        align,
+        alignInner,
+        gap,
+        edge,
+        tailSize,
+        Y_AXIS,
+        anchorTop,
+        anchorBottom,
+        bubbleHeight,
+        windowHeight,
+        flip,
+        slide,
+        trap
+    );
 
     return {
         bubbleStyle: {
@@ -285,9 +323,113 @@ const getFloatyStyle = (params) => {
             left: `${xResult.tail.toFixed()}px`,
             top: `${yResult.tail.toFixed()}px`
         },
+        // $FlowFixMe - one of xResult.side or yResult.side will be a string
         realSide: xResult.side || yResult.side
     };
 };
+
+type PositionOnAxisResult = {
+    pos: number,
+    tail: number,
+    tailHide: boolean,
+    side: ?string
+};
+
+// exported only for tests
+// do not use this directly,
+// this is not part of the public API
+// and is liable to change at any time
+export const positionOnAxis = (
+    side: string,
+    align: string,
+    alignInner: string,
+    gap: number,
+    edge: number,
+    tailSize: number,
+    axis: any,
+    anchorStart: number,
+    anchorEnd: number,
+    bubbleSize: number,
+    windowSize: number,
+    flip: boolean,
+    slide: boolean,
+    trap: boolean
+): PositionOnAxisResult => {
+
+    // if this is the main axis a.k.a. props.side
+    // then do this bit
+    if(axis[side] !== undefined) {
+        // set position to the preferred side of the bubble
+        let startPos = anchorStart - bubbleSize - gap;
+        let endPos = anchorEnd + gap;
+        let pos = lerp(startPos, endPos, axis[side]);
+
+        // if using flip, flip side if there isnt enough room on preferred side
+        if(flip && (pos < edge || pos + bubbleSize > windowSize - edge)) {
+            pos = lerp(endPos, startPos, axis[side]);
+        }
+
+        // if using trap, clamp position so the bubble doesnt leave screen edges
+        if(trap) {
+            pos = clamp(pos, edge, windowSize - bubbleSize - edge);
+        }
+
+        // if new positioning of bubble has made it flip sides, tell the tail to swap sides
+        let midBubble = pos + bubbleSize * 0.5;
+        let midAnchor = anchorStart + (anchorEnd - anchorStart) * 0.5;
+        if(midBubble > midAnchor === (axis[side] === 0)) {
+            side = FLIP_AXIS[side];
+        }
+
+        // position tail
+        let tail = lerp(bubbleSize - 1, -tailSize + 1, axis[side]);
+
+        return {
+            pos,
+            tail,
+            tailHide: false,
+            side
+        };
+    }
+
+    // ...or else this is the cross axis a.k.a. props.align
+    let halfTail = tailSize * 0.5;
+    let innerPos = lerp(anchorStart + halfTail, anchorEnd - halfTail, axis[alignInner]);
+    let minPos = innerPos - bubbleSize + halfTail;
+    let maxPos = innerPos - halfTail;
+    let pos = lerp(minPos, maxPos, axis[align]);
+
+    // if using slide, slide bubble along if too close to screen edges
+    let tailHide = false;
+    if(slide || trap) {
+        pos = clamp(pos, edge, windowSize - bubbleSize - edge);
+
+        // find out if the tail has detached
+        // and if trap is used, hide the tail
+        // or if trap is not used, move the bubble back so its attached again
+        if(pos < minPos || pos > maxPos) {
+            if(trap) {
+                tailHide = true;
+            } else {
+                pos = clamp(pos, minPos, maxPos);
+            }
+        }
+    }
+
+    // position tail
+    let tail = (innerPos - halfTail) - pos;
+
+    return {
+        pos,
+        tail,
+        tailHide,
+        side: undefined
+    };
+};
+
+//
+// hooks and utils
+//
 
 // floatybox can be controlled
 // if so, keep usePortal's state in sync
@@ -369,10 +511,6 @@ const useElementRect = (ref, updateWhenChanged) => {
 const createHandlers = (open, portal) => {
     let {openPortal, closePortal, isOpen} = portal;
 
-    if(!open) {
-        return null;
-    }
-
     if(open === 'click') {
         return {
             onClick: isOpen ? closePortal : openPortal
@@ -385,5 +523,6 @@ const createHandlers = (open, portal) => {
             onMouseOut: closePortal
         };
     }
-    throw new Error('props.open must be set to "click", "hover" or not set');
+
+    return {};
 };

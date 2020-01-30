@@ -1,8 +1,8 @@
-# react-floatybox 🎈🎁🎉
+import {Box} from 'dcme-style/layout';
+import {Divider} from 'dcme-style/affordance';
+import {DragMe} from '../component/DragMe';
 
 A React component for positioning floating components such as tooltips, dropdowns, selects etc. Avoids screen edges!
-
-* **[See some examples - coming soon](#)**
 
 - [Features](#features)
 - [Installation](#installation)
@@ -10,7 +10,17 @@ A React component for positioning floating components such as tooltips, dropdown
 - [Props](#props)
 - [Development](#development)
 
+## Demo
+
+Here you can test out how different props behave.
+Drag the square around, and try scrolling the square out of view to see how the various options make it respond when it's near the edges of the screen.
+
+<DragMe />
+
+---
+
 ## Features
+
 - Handles all your bubble positioning
 - Avoids screen edges
 - Bubble size and position can be determined automatically, specified widths and heights not required
@@ -19,11 +29,15 @@ A React component for positioning floating components such as tooltips, dropdown
 - Can use its own state or can be controlled
 - Uses React portals via the [react-useportal](https://github.com/alex-cory/react-useportal) hook
 
+---
+
 ## Installation
 
-```
+```bash
 yarn add react-floatybox
 ```
+
+---
 
 ## Usage
 
@@ -79,7 +93,7 @@ const Basic = (props) => {
 };
 ```
 
-[See more examples - coming soon](#)
+---
 
 ## Props
 
@@ -251,6 +265,8 @@ onChange?: (isOpen: boolean) => void (optional)` // optional
 ```
 
 If provided along with `isOpen`, this will be called when FloatyBox wants to change state.
+
+---
 
 ## Development
 
