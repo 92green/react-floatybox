@@ -12,7 +12,7 @@ jobs:
       with:
         persist-credentials: false
     - name: Build
-      run: yarn build-docs
+      run: yarn prep && yarn build && yarn build-docs
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
