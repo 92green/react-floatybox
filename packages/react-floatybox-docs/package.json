@@ -9,7 +9,7 @@
   "scripts": {
     "build": "yarn gatsby build",
     "watch": "yarn gatsby develop",
-    "deploy": "yarn gatsby build --prefix-paths && gh-pages -d public"
+    "build-docs": "yarn gatsby build --prefix-paths"
   },
   "dependencies": {
     "dcme-gatsby": "^1.0.8",
