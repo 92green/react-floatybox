@@ -2,7 +2,7 @@
 
 A React component for positioning floating components such as tooltips, dropdowns, selects etc. Avoids screen edges!
 
-* **[See some examples - coming soon](#)**
+* **[See some examples](https://92green.github.io/react-floatybox/)**
 
 - [Features](#features)
 - [Installation](#installation)
@@ -79,7 +79,7 @@ const Basic = (props) => {
 };
 ```
 
-[See more examples - coming soon](#)
+[See more examples](https://92green.github.io/react-floatybox/)
 
 ## Props
 
