@@ -14,8 +14,7 @@ jobs:
     - name: Build
       run: yarn prep && yarn build && yarn build-docs
     - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@releases/v3
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BRANCH: gh-pages # The branch the action should deploy to.
-        FOLDER: packages/react-floatybox-docs/public # The folder the action should deploy.
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        publish_dir: ./packages/react-floatybox-docs/public
