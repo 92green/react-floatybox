@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "dcme-gatsby": "^1.0.8",
-    "dcme-style": "^1.1.7",
+    "dcme-style": "^1.1.9",
     "gatsby": "^2.16.5",
     "gatsby-plugin-compile-es6-packages": "^2.1.0",
     "gh-pages": "^1.1.0",

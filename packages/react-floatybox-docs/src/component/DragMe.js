@@ -36,7 +36,8 @@ const INITIAL_PROPS = {
         flip: true,
         slide: true,
         trap: false,
-        wrap: 'div'
+        wrap: 'div',
+        zIndex: 301
     },
     demo: {
         big: false,
@@ -197,7 +198,7 @@ const DragBox = (props: any): Node => {
             position: 'absolute',
             top: position.top,
             left: position.left,
-            zIndex: 50
+            zIndex: 300
         };
 
         forceUpdate = [
@@ -217,7 +218,7 @@ const DragBox = (props: any): Node => {
 const InnerBox = styled.div`
     width: ${props => props.big ? '12rem' : '3rem'};
     height: ${props => props.big ? '12rem' : '3rem'};
-    background: ${props => props.theme.colors.primary};
+    background: #ed766b;
     border-radius: 5px;
     text-align: center;
     cursor: move;

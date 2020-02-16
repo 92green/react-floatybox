@@ -3,7 +3,7 @@ const {gatsbyConfig} = require('dcme-gatsby/src/gatsby/gatsby-config');
 
 module.exports = {
     siteMetadata: {
-        title: 'React Floatybox Demo'
+        title: 'React Floatybox'
     },
     pathPrefix: '/react-floatybox',
     ...gatsbyConfig({
